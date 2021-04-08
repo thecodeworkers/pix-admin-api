@@ -1,7 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 @app.route('/')
 def welcome():
-    return jsonify('Pix Admin')
+    return render_template('index.html')
