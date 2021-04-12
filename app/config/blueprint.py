@@ -1,4 +1,4 @@
-from ..controllers import keys
+from ..controllers import auth
 
 def init_blueprints(app):
-    app.register_blueprint(keys.bp)
+    app.register_blueprint(auth.bp)
