@@ -5,6 +5,7 @@ import secrets
 if __name__ == '__main__':
     ENDC = '\033[0m'
     OKGREEN = '\033[92m'
+    FAIL = '\033[91m'
 
     def _generate_keys():
         key = secrets.token_urlsafe(32)
@@ -27,18 +28,27 @@ if __name__ == '__main__':
                 break
 
             except ValueError:
-                print(f'\n \033[91mInvalid choice! Enter 0 or 1.{ENDC}')
+                print(f'\n {FAIL}Invalid choice! Enter 0 or 1.{ENDC}')
                 prompt = '\n Do you want to generate the keys? '
 
         return n
 
-    print(f'\033[96m\n You are about to create the keys for the application, this program will generate three keys, two of them must be placed in the app .env and another must be used to make requests to the api \n{ENDC}')
-    print(f""" {OKGREEN}1) Generate Keys{ENDC} \n 0) Exit \n""")
-    choice = _input_asked(' What\'s is your choice: ')
+    try:
+        print(f'\033[96m\n You are about to create the keys for the application, this program will generate three keys, two of them must be placed in the app .env and another must be used to make requests to the api \n{ENDC}')
+        print(f""" {OKGREEN}1) Generate Keys{ENDC} \n 0) Exit \n""")
+        choice = _input_asked(' What\'s is your choice: ')
 
-    if not choice:
+        if not choice:
+            print('')
+            quit()
+
+        if choice:
+            _generate_keys()
+
+    except Exception:
+        print(f'\n {FAIL}Error occurred.{ENDC}')
         print('')
-        quit()
 
-    if choice:
-        _generate_keys()
+    except KeyboardInterrupt:
+        print('\n')
+        pass
