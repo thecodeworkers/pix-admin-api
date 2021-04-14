@@ -1,3 +1,4 @@
+from app.database import MigrateDatabase
 from app.console import *
 
 if __name__ == '__main__':
@@ -14,8 +15,14 @@ if __name__ == '__main__':
             key_generation_program()
 
         if choice == 2:
-            pass
+            print('')
+            MigrateDatabase()
+            print('')
 
+    except Exception as e:
+        print(f'\n {FAIL}Error occurred.{ENDC}')
+        print(f' {FAIL}{e}{ENDC}')
+        print('')
     except KeyboardInterrupt:
         print('\n')
         pass
