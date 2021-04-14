@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from bson import json_util
-from .skeleton import collections
-from ..config.constant import DATABASE_HOST, DATABASE_NAME, DATABASE_PORT
+from .skeleton import databases
+from ..config.constant import DATABASE_HOST, DATABASE_PORT
 from ..console.colors import OKGREEN, ENDC
 import re
 import json
@@ -35,14 +35,19 @@ class MigrateDatabase():
 
     def __migrate(self):
         try:
-            for collection in collections:
-                db = self.__client[DATABASE_NAME]
-                collection_name = collection.split('.')[0]
-                current_collection = db[collection_name]
+            for database in databases:
+                db_name = database['name']
+                db_collections = database['collections']
 
-                if not current_collection.count_documents({}):
-                    data = self.__read_documents(collection)
-                    current_collection.insert_many(data)
+                db = self.__client[db_name]
+
+                for db_collection in db_collections:
+                    collection_name = db_collection.split('.')[0]
+                    collection = db[collection_name]
+
+                    if not collection.count_documents({}):
+                        data = self.__read_documents(db_collection)
+                        collection.insert_many(data)
 
             print(f'{OKGREEN} Database migrate successfully{ENDC}')
             self.__client.close()
