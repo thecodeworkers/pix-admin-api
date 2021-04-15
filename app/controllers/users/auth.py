@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from ...utils import success_operation, error_operation
-from ..logger import log_record
+from ...decorators import log_record
 
 bp = Blueprint('auth', __name__, url_prefix='/api/')
 

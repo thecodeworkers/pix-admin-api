@@ -5,7 +5,8 @@ response = lambda result='': {'result': result}
 def api_abort(code, error):
     abort(code, {'message': str(error)})
 
-def success_operation(service, method, data, details=''):
+def success_operation(service, method, data):
+    details = data['id'] if 'id' in data else ''
     return {
         **__default_log_entry(service, method, details),
         'log_type': 'INFO',
