@@ -1,6 +1,6 @@
 from flask import Blueprint, request
+from ..utils import api_abort, success_operation, error_operation
 from .logger import log_record
-
 
 bp = Blueprint('auth', __name__, url_prefix='/api/')
 
@@ -9,20 +9,16 @@ def create_key():
     return ''
 
 @bp.route('/verify-keys', methods=['GET'])
-def verify_key():
-    return __sign_up()
-
-
 @log_record
-def __sign_up():
-    return {
-        'user_id': '',
-        'log_type': 'INFO',
-        'service': 'auth',
-        'method': 'sign_in',
-        'details': {
-            'description': 'A user was registered',
-            'id': ''
-        },
-        'response': 'yes'
-    }
+def sign_in():
+    return error_operation(
+        'auth',
+        sign_in.__name__,
+        500,
+        'error'
+    )
+    return success_operation(
+        'auth',
+        sign_in.__name__,
+        'token'
+    )

@@ -4,6 +4,7 @@ from .config  import init_blueprints, error_handler
 from .middlewares import middlewares
 
 app = Flask(__name__)
+app.secret_key = b'\x9b\x0f\xe7\xc6\xdcJu\xb5\xeb\xaf\xbft\x1d\xed\x98@'
 CORS(app)
 
 @app.route('/')
