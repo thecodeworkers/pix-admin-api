@@ -2,6 +2,7 @@ import os
 
 APP_NAME = os.getenv('APP_NAME', '')
 APP_KEY = os.getenv('APP_KEY', '')
+APP_SECRET = os.getenv('APP_SECRET', '')
 
 DATABASE_NAME = os.getenv('DATABASE_NAME', 'pix')
 DATABASE_HOST = os.getenv('DATABASE_HOST', '127.0.0.1')

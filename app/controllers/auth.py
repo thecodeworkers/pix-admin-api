@@ -1,7 +1,6 @@
 from flask import Blueprint, request
-from ..config.keys import verify_application_token
 
-bp = Blueprint('keys', __name__, url_prefix='/api/')
+bp = Blueprint('auth', __name__, url_prefix='/api/')
 
 @bp.route('/create-keys', methods=['GET'])
 def create_key():
