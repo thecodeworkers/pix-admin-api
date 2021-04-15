@@ -1,6 +1,7 @@
 from flask import request
 from ..config.keys import verify_application_token
 from ..config.constant import APP_KEY, APP_SECRET
+from ..utils import api_abort
 
 def verify_app_token():
     try:
@@ -16,5 +17,4 @@ def verify_app_token():
         pass
 
     except Exception as e:
-        print(e)
-        pass
+        api_abort(403, e)

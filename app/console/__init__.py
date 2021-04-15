@@ -1,3 +1,3 @@
-from .key_generation import *
+from .key_generation import create_application_token
+from .default_ask import input_asked
 from .colors import *
-from .default_ask import *
