@@ -7,4 +7,4 @@ class SaveCurrencyInput(Schema):
     active = fields.Bool()
     type = fields.Str(required=True)
     symbol = fields.Str(required=True)
-    price = fields.Decimal()
+    price = fields.Float()
