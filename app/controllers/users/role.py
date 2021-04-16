@@ -1,7 +1,7 @@
 from flask import Blueprint
 from ..crud import save_record, get_record, update_record, delete_record
-from ...collections import Roles
-from ...schemas import SaveRoleInput
+from ...collections.roles import Roles
+from ...schemas.role_schema import SaveRoleInput
 
 bp = Blueprint('role', __name__, url_prefix='/api/')
 

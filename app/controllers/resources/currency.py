@@ -1,7 +1,7 @@
 from flask import Blueprint
 from ..crud import save_record, get_record, update_record, delete_record
-from ...collections import Currencies
-from ...schemas import SaveCurrencyInput
+from ...collections.currencies import Currencies
+from ...schemas.currency_schema import SaveCurrencyInput
 
 bp = Blueprint('currency', __name__, url_prefix='/api/')
 

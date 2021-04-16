@@ -1,7 +1,7 @@
 from flask import Blueprint
 from ..crud import save_record, get_record, update_record, delete_record
-from ...collections import Languages
-from ...schemas import SaveLanguageInput
+from ...collections.languages import Languages
+from ...schemas.language_schema import SaveLanguageInput
 
 bp = Blueprint('language', __name__, url_prefix='/api/')
 

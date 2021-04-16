@@ -1,7 +1,7 @@
 from flask import Blueprint
 from ..crud import save_record, get_record, update_record, delete_record
-from ...collections import Permissions
-from ...schemas import SavePermissionInput
+from ...collections.permissions import Permissions
+from ...schemas.permission_schema import SavePermissionInput
 
 bp = Blueprint('permission', __name__, url_prefix='/api/')
 
