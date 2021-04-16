@@ -1,5 +1,6 @@
-from .verify_token import *
+from .verify_token import verify_app_token
 
 middlewares = {
-    'auth': [verify_app_token]
+    'auth': [verify_app_token],
+    'user': [verify_app_token]
 }
