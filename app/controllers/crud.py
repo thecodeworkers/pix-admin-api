@@ -7,15 +7,15 @@ from ..utils import *
 @log_record
 def get_record(id, Collection, service, method):
     try:
-        collection = Collection.objects.get(id=id)
-        collection = parser_one_object(collection)
+        document = Collection.objects.get(id=id)
+        document = parser_one_object(document)
 
-        return success_operation(service, method, collection)
+        return success_operation(service, method, document)
 
     except Collection.DoesNotExist as dne:
-        error_operation(service, method, 404, dne)
+        return error_operation(service, method, 404, dne)
     except Exception as ex:
-        error_operation(service, method, 500, ex)
+        return error_operation(service, method, 500, ex)
 
 @log_record
 def save_record(Schema, Collection, service, method):
@@ -31,5 +31,35 @@ def save_record(Schema, Collection, service, method):
         return error_operation(service, method, 400, ve)
     except NotUniqueError as nue:
         return error_operation(service, method, 422, nue)
+    except Exception as ex:
+        return error_operation(service, method, 500, ex)
+
+@log_record
+def update_record(id, Schema, Collection, service, method):
+    try:
+        schema = Schema()
+        document = schema.load(request.json)
+        document = update_or_create(Collection, {'id': id}, document)
+        data = parser_one_object(document)
+
+        return success_operation(service, method, data)
+
+    except ValidationError as ve:
+        return error_operation(service, method, 400, ve)
+    except NotUniqueError as nue:
+        return error_operation(service, method, 422, nue)
+    except Exception as ex:
+        return error_operation(service, method, 500, ex)
+
+@log_record
+def delete_record(id, Collection, service, method):
+    try:
+        document = Collection.objects.get(id=id)
+        document.delete()
+
+        return success_operation(service, method)
+
+    except Collection.DoesNotExist as dne:
+        return error_operation(service, method, 404, dne)
     except Exception as ex:
         return error_operation(service, method, 500, ex)
