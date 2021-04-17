@@ -1,6 +1,5 @@
 from flask import Blueprint, request
 from marshmallow import ValidationError
-from mongoengine import document
 from mongoengine.queryset import NotUniqueError
 from ...schemas.user_schema import SaveUserInput
 from ...decorators.common import log_record
