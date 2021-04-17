@@ -2,6 +2,7 @@ from flask.globals import session
 from flask import request
 from functools import wraps
 from ..utils import api_abort
+from ..collections.admin_logs import AdminLogs
 import time
 
 def log_record(func):
@@ -27,16 +28,25 @@ def log_record(func):
     return wrapper
 
 def __save_log(log_type, service, method, details, time_execute):
-    info = {
-        'user': session['user'] if 'user' in session else '',
-        'ip_address': request.remote_addr,
-        'log_type': log_type,
-        'service': service,
-        'method': method,
-        'details': details,
-        'time_execute': time_execute
-    }
+    try:
+        info = {
+            'user': session['user'] if 'user' in session else '',
+            'ip_address': request.remote_addr,
+            'log_type': log_type,
+            'service': service,
+            'method': method,
+            'details': details,
+            'time_execute': time_execute
+        }
 
-    print(info)
+        AdminLogs(**info).save()
 
-    ## insert log in database
+    except Exception as err:
+        AdminLogs(
+            ip_address=request.remote_addr,
+            log_type='ERROR',
+            service=__name__,
+            method='save_log',
+            details=str(err),
+            time_execute=time_execute
+        ).save()
