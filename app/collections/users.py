@@ -1,6 +1,7 @@
 from mongoengine import Document, StringField, ReferenceField, DateTimeField
 from bson import json_util
 from ..config.constant import DATABASE_USERS
+from ..utils.query_set import override_save
 from .roles import Roles
 import datetime
 
@@ -14,8 +15,12 @@ class Users(Document):
 
     meta = {'db_alias': DATABASE_USERS}
 
+    def save(self, *args, **kwargs):
+        return override_save(self, Users, *args, **kwargs)
+
     def to_json(self):
         data = self.to_mongo()
+        data['created_at'] = self.created_at.isoformat()
 
         data['role'] = {
             'id': str(self.role.id),

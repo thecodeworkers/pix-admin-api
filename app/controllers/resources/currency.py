@@ -20,14 +20,14 @@ def save():
 
 @bp.route('/currencies/<id>', methods=['PUT'])
 def update(id):
-    return __update(id, __name__, update.__name__)
+    return __update(id, update.__name__)
 
 @bp.route('/currencies/<id>', methods=['DELETE'])
 def delete(id):
     return delete_record(id, Currencies, __name__, delete.__name__), 204
 
 @log_record
-def __update(id, service, method):
+def __update(id, method):
     try:
         schema = SaveCurrencyInput()
         document = schema.load(request.json)
@@ -38,11 +38,11 @@ def __update(id, service, method):
         data = Currencies(**document).save()
         data = parser_one_object(data)
 
-        return success_operation(service, method, data)
+        return success_operation(__name__, method, data)
 
     except ValidationError as ve:
-        return error_operation(service, method, 400, ve)
+        return error_operation(__name__, method, 400, ve)
     except NotUniqueError as nue:
-        return error_operation(service, method, 422, nue)
+        return error_operation(__name__, method, 422, nue)
     except Exception as ex:
-        return error_operation(service, method, 500, ex)
+        return error_operation(__name__, method, 500, ex)
