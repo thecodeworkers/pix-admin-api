@@ -18,3 +18,6 @@ def verify_app_token():
 
     except Exception as e:
         api_abort(403, e)
+
+def verify_user_token():
+    pass
