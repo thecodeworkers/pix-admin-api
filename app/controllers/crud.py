@@ -48,25 +48,6 @@ def update_record(id, Schema, Collection, service, method):
 
         schema = Schema()
         document = schema.load(request.json)
-        document = update_or_create(Collection, {'id': id}, document)
-        data = parser_one_object(document)
-
-        return success_operation(service, method, data)
-
-    except ValidationError as ve:
-        return error_operation(service, method, 400, ve)
-    except NotUniqueError as nue:
-        return error_operation(service, method, 422, nue)
-    except Exception as ex:
-        return error_operation(service, method, 500, ex)
-
-@log_record
-def update_fallback_record(id, Schema, Collection, service, method):
-    try:
-        valid_scope(service, method)
-
-        schema = Schema()
-        document = schema.load(request.json)
 
         data = Collection.objects(id=id)
         if data: document['id'] = id
