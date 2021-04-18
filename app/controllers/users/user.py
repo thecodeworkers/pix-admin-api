@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from flask.globals import session
 from marshmallow import ValidationError
 from mongoengine.queryset import NotUniqueError
 from ..crud import get_record
@@ -29,6 +30,8 @@ def delete(id):
 @log_record
 def __save(method):
     try:
+        valid_scope(__name__, method)
+
         schema = SaveUserInput()
         payload = schema.load(request.json)
 
@@ -38,7 +41,7 @@ def __save(method):
         payload['password'] = hash_password(payload['password'])
         document = Users(**payload).save()
 
-        return success_operation(__name__, method, parser_one_object(document))
+        return success_operation(__name__, method, parser_one_object(document)), 201
 
     except ValidationError as ve:
         return error_operation(__name__, method, 400, ve)
@@ -47,13 +50,52 @@ def __save(method):
     except Roles.DoesNotExist as dne:
         return error_operation(__name__, method, 404, dne)
     except Exception as ex:
-        return error_operation(__name__, method, 500, ex)
+        return rewrite_exception(__name__, method, ex)
 
 @log_record
 def __update(id, method):
-    pass
+    try:
+        valid_scope(__name__, method)
+
+        schema = SaveUserInput()
+        document = schema.load(request.json)
+
+        role = Roles.objects.get(code=document['role'])
+        document['role'] = role
+
+        data = Users.objects(id=id)
+        if data: document['id'] = id
+
+        document['password'] = hash_password(document['password'])
+        data = Users(**document).save()
+        data = parser_one_object(data)
+
+        return success_operation(__name__, method, data)
+
+    except ValidationError as ve:
+        return error_operation(__name__, method, 400, ve)
+    except NotUniqueError as nue:
+        return error_operation(__name__, method, 422, nue)
+    except Roles.DoesNotExist as dne:
+        return error_operation(__name__, method, 404, dne)
+    except Exception as ex:
+        return rewrite_exception(__name__, method, ex)
 
 @log_record
 def __delete(id, method):
-    ## validar que no te puedas borrar a ti mismo
-    pass
+    try:
+        valid_scope(__name__, method)
+        document = Users.objects.get(id=id)
+        user = session['user']
+
+        if str(document.id) == user['id']:
+            raise Exception('This operation not permited', 403)
+
+        document.delete()
+
+        return success_operation(__name__, method)
+
+    except Users.DoesNotExist as dne:
+        return error_operation(__name__, method, 404, dne)
+    except Exception as ex:
+        return rewrite_exception(__name__, method, ex)

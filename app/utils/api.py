@@ -1,5 +1,6 @@
 from flask import abort
 from flask.globals import session
+from .common import get_item_list
 
 response = lambda result='': {'result': result}
 
@@ -31,9 +32,13 @@ def valid_scope(service, method):
     scope_name = f'{service_name[-1]}_{method}'
 
     if scope_name not in scopes:
-        raise ReferenceError('Unauthorized')
+        raise Exception('Unauthorized', 401)
 
     pass
+
+def rewrite_exception(service, method, error):
+    status_code = get_item_list(error.args, 1)
+    return error_operation(service, method, status_code if status_code else 500, error.args[0])
 
 def __default_log_entry(*args):
     return {

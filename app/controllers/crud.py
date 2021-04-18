@@ -15,10 +15,8 @@ def get_record(id, Collection, service, method):
 
     except Collection.DoesNotExist as dne:
         return error_operation(service, method, 404, dne)
-    except ReferenceError as re:
-        return error_operation(service, method, 401, re)
     except Exception as ex:
-        return error_operation(service, method, 500, ex)
+        return rewrite_exception(service, method, ex)
 
 @log_record
 def save_record(Schema, Collection, service, method):
@@ -36,10 +34,8 @@ def save_record(Schema, Collection, service, method):
         return error_operation(service, method, 400, ve)
     except NotUniqueError as nue:
         return error_operation(service, method, 422, nue)
-    except ReferenceError as re:
-        return error_operation(service, method, 401, re)
     except Exception as ex:
-        return error_operation(service, method, 500, ex)
+        return rewrite_exception(service, method, ex)
 
 @log_record
 def update_record(id, Schema, Collection, service, method):
@@ -55,16 +51,14 @@ def update_record(id, Schema, Collection, service, method):
         data = Collection(**document).save()
         data = parser_one_object(data)
 
-        return success_operation(__name__, method, data)
+        return success_operation(service, method, data)
 
     except ValidationError as ve:
-        return error_operation(__name__, method, 400, ve)
+        return error_operation(service, method, 400, ve)
     except NotUniqueError as nue:
-        return error_operation(__name__, method, 422, nue)
-    except ReferenceError as re:
-        return error_operation(__name__, method, 401, re)
+        return error_operation(service, method, 422, nue)
     except Exception as ex:
-        return error_operation(__name__, method, 500, ex)
+        return rewrite_exception(service, method, ex)
 
 @log_record
 def delete_record(id, Collection, service, method):
@@ -77,7 +71,5 @@ def delete_record(id, Collection, service, method):
 
     except Collection.DoesNotExist as dne:
         return error_operation(service, method, 404, dne)
-    except ReferenceError as re:
-        return error_operation(service, method, 401, re)
     except Exception as ex:
-        return error_operation(service, method, 500, ex)
+        return rewrite_exception(service, method, ex)
