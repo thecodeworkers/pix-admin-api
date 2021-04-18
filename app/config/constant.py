@@ -12,3 +12,7 @@ DATABASE_LOGS = os.getenv('DATABASE_LOGS', 'pix_logs')
 
 DATABASE_HOST = os.getenv('DATABASE_HOST', '127.0.0.1')
 DATABASE_PORT = int(os.getenv('DATABASE_PORT', 27017))
+
+JWT_SECRET = os.getenv('JWT_SECRET', '')
+JWT_ALGORITHM = os.getenv('JWT_ALGORITHM', 'HS256')
+JWT_LIFETIME = int(os.getenv('JWT_LIFETIME', '3600'))
