@@ -82,7 +82,14 @@
     "whitelist_get",
     "whitelist_save",
     "whitelist_update",
-    "whitelist_delete"
+    "whitelist_delete",
+    "user_get",
+    "user_delete",
+    "user_save",
+    "user_update",
+    "permission_table",
+    "permission_save",
+    "user_table"
   ]
 },{
   "_id": {
