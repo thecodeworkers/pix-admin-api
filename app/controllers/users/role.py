@@ -1,9 +1,34 @@
 from flask import Blueprint
-from ..crud import save_record, get_record, update_record, delete_record
+from ..crud import save_record, get_record, update_record, delete_record, table_record
 from ...collections.roles import Roles
 from ...schemas.role_schema import SaveRoleInput
 
 bp = Blueprint('role', __name__, url_prefix='/api/')
+
+@bp.route('/roles', methods=['GET'])
+def table():
+    pipeline = lambda search: [
+        {
+            '$match': {
+                '$or': [
+                    {'name': {'$regex': search, '$options': 'i'}},
+                    {'code': {'$regex': search, '$options': 'i'}},
+                ]
+            }
+        },
+        {
+            '$set': {
+                'id': {'$toString': '$_id'}
+            }
+        },
+        {
+            '$project': {
+                '_id': 0
+            }
+        }
+    ]
+
+    return table_record(pipeline, {'name': 1}, Roles, __name__, table.__name__)
 
 @bp.route('/roles/<id>', methods=['GET'])
 def get(id):

@@ -30,7 +30,7 @@ def log_record(func):
 def __save_log(log_type, service, method, details, time_execute):
     try:
         info = {
-            'user': session['user'] if 'user' in session else '',
+            'user': session['user']['id'] if 'user' in session else '',
             'ip_address': request.remote_addr,
             'log_type': log_type,
             'service': service,

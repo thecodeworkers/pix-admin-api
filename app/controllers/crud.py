@@ -5,6 +5,21 @@ from ..decorators import log_record
 from ..utils import *
 
 @log_record
+def table_record(pipeline, sort_criteria, Collection, service, method):
+    try:
+        valid_scope(service, method)
+        search, page, per_page = unpack_url_params()
+
+        pipeline = pipeline(search) + pagination(page, per_page, sort_criteria)
+        results = Collection.objects().aggregate(pipeline)
+        results = default_paginate_schema(results, page, per_page)
+
+        return success_operation(service, method, results)
+
+    except Exception as err:
+        return rewrite_exception(service, method, err)
+
+@log_record
 def get_record(id, Collection, service, method):
     try:
         valid_scope(service, method)
