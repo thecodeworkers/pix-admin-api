@@ -23,9 +23,9 @@ class Users(Document):
         data['created_at'] = self.created_at.isoformat()
 
         data['role'] = {
-            'id': str(self.role.id),
             'name': self.role.name,
-            'code': self.role.code
+            'code': self.role.code,
+            'scopes': self.role.scopes
         }
 
         return json_util.dumps(data)
