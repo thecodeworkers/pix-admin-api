@@ -1,5 +1,5 @@
 from flask import Blueprint
-from ..crud import save_record, get_record, update_record, delete_record
+from ..crud import save_record, get_record, delete_record, update_fallback_record
 from ...collections.states import States
 from ...schemas.state_schema import SaveStateInput
 
@@ -15,7 +15,7 @@ def save():
 
 @bp.route('/states/<id>', methods=['PUT'])
 def update(id):
-    return update_record(id, SaveStateInput, States, __name__, update.__name__)
+    return update_fallback_record(id, SaveStateInput, States, __name__, update.__name__)
 
 @bp.route('/states/<id>', methods=['DELETE'])
 def delete(id):
