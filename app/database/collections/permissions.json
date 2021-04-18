@@ -1,0 +1,38 @@
+[{
+  "_id": {
+    "$oid": "60776e84b9bb47b090d4c84d"
+  },
+  "service": "role",
+  "methods": [
+    "table",
+    "get_all",
+    "get",
+    "save",
+    "update",
+    "delete"
+  ]
+},{
+  "_id": {
+    "$oid": "60777605b9bb47b090d4c84e"
+  },
+  "service": "permission",
+  "methods": []
+},{
+  "_id": {
+    "$oid": "60777655b9bb47b090d4c84f"
+  },
+  "service": "currency",
+  "methods": []
+},{
+  "_id": {
+    "$oid": "60777670b9bb47b090d4c850"
+  },
+  "service": "language",
+  "methods": []
+},{
+  "_id": {
+    "$oid": "607776b3b9bb47b090d4c852"
+  },
+  "service": "country",
+  "methods": []
+}]

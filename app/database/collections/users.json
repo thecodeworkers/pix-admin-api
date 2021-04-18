@@ -1,0 +1,25 @@
+[{
+  "_id": {
+    "$oid": "607a4ff72885b37c070eb01f"
+  },
+  "email": "admin@email.com",
+  "password": "440f777cf0dc553bc4d689330a5b26b24ddcba353a8d2b4ddc8309388f3407bfe8ea9c9f309b94255e8d011bc2e2541fd452c14a542d2fd7b123e0ad912f31817e79ddf71d9523127ea2a332a8d459e4f99bccf9bc7669cfb4423b5dedb7afb2",
+  "role": {
+    "$oid": "6001c711f16d6a0e7aee6aea"
+  },
+  "created_at": {
+    "$date": "2021-04-16T23:03:19.623Z"
+  }
+},{
+  "_id": {
+    "$oid": "607c82241359ec06ae9f6a34"
+  },
+  "email": "basic@email.com",
+  "password": "1e2f813468ca778b37d2170cdc9d586b26c8a812fabca01cf45fcfb522ba500acee1edfb24e73a950386a696fcef7a25e14d1b49acdb7953c602815f0fc1a1d88c0f542e48f394e567e110cf9a338aa236640bea9b0e24fe04b33124d28b5722",
+  "role": {
+    "$oid": "6001c711f16d6a0e7aee6aeb"
+  },
+  "created_at": {
+    "$date": "2021-04-18T15:01:56.504Z"
+  }
+}]

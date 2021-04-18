@@ -1,2 +1,7 @@
 Flask
 python-dotenv
+cryptography
+mongoengine
+flask-cors
+marshmallow
+pyjwt
