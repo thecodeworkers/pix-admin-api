@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  mongodb:
+    container_name: pix_mongodb
+    image: mongo:4.4-bionic
+    ports:
+      - '27017:27017'
+
+  pix_admin_api:
+    container_name: pix_admin_api
+    build: .
+    volumes:
+      - ./:/usr/app
+    ports:
+      - '5000:5000'
+    env_file:
+      - .env
