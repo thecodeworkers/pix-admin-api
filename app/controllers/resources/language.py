@@ -1,9 +1,34 @@
 from flask import Blueprint
-from ..crud import save_record, get_record, update_record, delete_record
+from ..crud import save_record, get_record, update_record, delete_record, table_record
 from ...collections.languages import Languages
 from ...schemas.language_schema import SaveLanguageInput
 
 bp = Blueprint('language', __name__, url_prefix='/api/')
+
+@bp.route('/languages', methods=['GET'])
+def table():
+    pipeline = lambda search: [
+        {
+            '$match': {
+                '$or': [
+                    {'name': {'$regex': search, '$options': 'i'}},
+                    {'prefix': {'$regex': search, '$options': 'i'}},
+                ]
+            }
+        },
+        {
+            '$set': {
+                'id': {'$toString': '$_id'}
+            }
+        },
+        {
+            '$project': {
+                '_id': 0
+            }
+        }
+    ]
+
+    return table_record(pipeline, {'name': 1}, Languages, __name__, table.__name__)
 
 @bp.route('/languages/<id>', methods=['GET'])
 def get(id):

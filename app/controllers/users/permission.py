@@ -1,9 +1,33 @@
 from flask import Blueprint
-from ..crud import save_record, get_record, update_record, delete_record
+from ..crud import save_record, get_record, update_record, delete_record, table_record
 from ...collections.permissions import Permissions
 from ...schemas.permission_schema import SavePermissionInput
 
 bp = Blueprint('permission', __name__, url_prefix='/api/')
+
+@bp.route('/permissions', methods=['GET'])
+def table():
+    pipeline = lambda search: [
+        {
+            '$match': {
+                '$or': [
+                    {'service': {'$regex': search, '$options': 'i'}}
+                ]
+            }
+        },
+        {
+            '$set': {
+                'id': {'$toString': '$_id'}
+            }
+        },
+        {
+            '$project': {
+                '_id': 0
+            }
+        }
+    ]
+
+    return table_record(pipeline, {'service': 1}, Permissions, __name__, table.__name__)
 
 @bp.route('/permissions/<id>', methods=['GET'])
 def get(id):

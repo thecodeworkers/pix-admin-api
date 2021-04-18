@@ -1,9 +1,37 @@
 from flask import Blueprint
-from ..crud import save_record, get_record, delete_record, update_record
+from ..crud import save_record, get_record, delete_record, update_record, table_record
 from ...collections.currencies import Currencies
 from ...schemas.currency_schema import SaveCurrencyInput
 
 bp = Blueprint('currency', __name__, url_prefix='/api/')
+
+@bp.route('/currencies', methods=['GET'])
+def table():
+    pipeline = lambda search: [
+        {
+            '$match': {
+                '$or': [
+                    {'name': {'$regex': search, '$options': 'i'}},
+                    {'color': {'$regex': search, '$options': 'i'}},
+                    {'type': {'$regex': search, '$options': 'i'}},
+                    {'symbol': {'$regex': search, '$options': 'i'}},
+                    {'price': {'$regex': search, '$options': 'i'}},
+                ]
+            }
+        },
+        {
+            '$set': {
+                'id': {'$toString': '$_id'}
+            }
+        },
+        {
+            '$project': {
+                '_id': 0
+            }
+        }
+    ]
+
+    return table_record(pipeline, {'name': 1}, Currencies, __name__, table.__name__)
 
 @bp.route('/currencies/<id>', methods=['GET'])
 def get(id):

@@ -1,9 +1,36 @@
 from flask import Blueprint
-from ..crud import save_record, get_record, update_record, delete_record
+from ..crud import save_record, get_record, update_record, delete_record, table_record
 from ...collections.cities import Cities
 from ...schemas.city_schema import SaveCityInput
 
 bp = Blueprint('city', __name__, url_prefix='/api/')
+
+@bp.route('/cities', methods=['GET'])
+def table():
+    pipeline = lambda search: [
+        {
+            '$match': {
+                '$or': [
+                    {'name': {'$regex': search, '$options': 'i'}},
+                ]
+            }
+        },
+        {
+            '$group': {
+                '_id': '$_id',
+                'id': {'$first': {'$toString': '$_id'}},
+                'name': {'$first': '$name'},
+                'state': {'$first': {'$toString': '$state'}},
+            }
+        },
+        {
+            '$project': {
+                '_id': 0
+            }
+        }
+    ]
+
+    return table_record(pipeline, {'name': 1}, Cities, __name__, table.__name__)
 
 @bp.route('/cities/<id>', methods=['GET'])
 def get(id):

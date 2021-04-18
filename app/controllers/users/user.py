@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask.globals import session
 from marshmallow import ValidationError
 from mongoengine.queryset import NotUniqueError
-from ..crud import get_record
+from ..crud import get_record, table_record
 from ...schemas.user_schema import SaveUserInput
 from ...decorators.common import log_record
 from ...collections.users import Users
@@ -10,6 +10,43 @@ from ...collections.roles import Roles
 from ...utils import *
 
 bp = Blueprint('user', __name__, url_prefix='/api/')
+
+@bp.route('/users', methods=['GET'])
+def table():
+    pipeline = lambda search: [
+        {
+            '$lookup': {
+                'from': 'roles',
+                'localField': 'role',
+                'foreignField': '_id',
+                'as': 'role'
+            }
+        },
+        { '$unwind': '$role' },
+        {
+            '$match': {
+                '$or': [
+                    {'email': {'$regex': search, '$options': 'i'}},
+                    {'role.name': {'$regex': search, '$options': 'i'}}
+                ]
+            }
+        },
+        {
+            '$project': {
+                'id': {'$toString': '$_id'},
+                '_id': 0,
+                'email': 1,
+                'created_at': 1,
+                'role': {
+                    'id': {'$toString': '$role._id'},
+                    'name': 1,
+                    'scopes': 1
+                }
+            }
+        }
+    ]
+
+    return table_record(pipeline, {'email': 1}, Users, __name__, table.__name__)
 
 @bp.route('/users/<id>', methods=['GET'])
 def get(id):
@@ -41,7 +78,7 @@ def __save(method):
         payload['password'] = hash_password(payload['password'])
         document = Users(**payload).save()
 
-        return success_operation(__name__, method, parser_one_object(document)), 201
+        return success_operation(__name__, method, parser_one_object(document))
 
     except ValidationError as ve:
         return error_operation(__name__, method, 400, ve)
