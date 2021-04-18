@@ -23,5 +23,9 @@ middlewares = {
     'language': [
         verify_app_token,
         verify_user_token
+    ],
+    'country': [
+        verify_app_token,
+        verify_user_token
     ]
 }

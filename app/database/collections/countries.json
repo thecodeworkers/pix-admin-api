@@ -12998,12 +12998,4 @@
       "$oid": "5f3594f129ab93682403d8ff"
     }
   ]
-},{
-  "_id": {
-    "$oid": "5f73be2974224a639799c939"
-  },
-  "name": "Prueba",
-  "phone_prefix": "+1",
-  "active": true,
-  "states": []
 }]
