@@ -16,3 +16,4 @@ def init_blueprints(app):
     app.register_blueprint(language.bp)
     app.register_blueprint(country.bp)
     app.register_blueprint(state.bp)
+    app.register_blueprint(city.bp)

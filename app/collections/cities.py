@@ -1,6 +1,6 @@
 from mongoengine import Document, ReferenceField, StringField, DateTimeField
 from bson.json_util import dumps
-from ..utils.query_set import RefQuerySet
+from ..utils.query_set import RefQuerySet, override_save
 from ..config.constant import DATABASE_RESOURCES
 
 class Cities(Document):
@@ -13,10 +13,19 @@ class Cities(Document):
         'queryset_class': RefQuerySet
     }
 
+    def save(self, *args, **kwargs):
+        return override_save(self, Cities, *args, **kwargs)
+
     def to_json(self):
         data = self._data
 
-        data['state'] = str(data['state'].id)
+        if 'created_at' in data:
+            if data['created_at']:
+                data['created_at'] = data['created_at'].isoformat()
+
+        if data['state']:
+            data['state'] = str(data['state'].id)
+
         data['_id'] = data['id']
         del data['id']
 
