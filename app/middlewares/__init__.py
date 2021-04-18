@@ -27,5 +27,13 @@ middlewares = {
     'country': [
         verify_app_token,
         verify_user_token
+    ],
+    'state': [
+        verify_app_token,
+        verify_user_token
+    ],
+    'city': [
+        verify_app_token,
+        verify_user_token
     ]
 }

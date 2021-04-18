@@ -29,7 +29,7 @@ def override_list_to_json(instance):
             data.created_at = instance.created_at.isoformat()
 
     data = {
-        key if key != 'id' else '_id': [parser_one_object(old_data) for old_data in data[key]]
+        key if key != 'id' else '_id': [parser_one_object(old_data) for old_data in data[key] if isinstance(old_data, Document)]
         if isinstance(data[key], list) else str(data[key].id)
         if isinstance(data[key], Document) else data[key] for key in data
     }
