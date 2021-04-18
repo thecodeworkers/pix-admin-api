@@ -5,7 +5,7 @@ from ..crud import save_record, get_record, delete_record
 from ...collections.currencies import Currencies
 from ...schemas.currency_schema import SaveCurrencyInput
 from ...utils.parser import parser_one_object
-from ...utils.api import success_operation, error_operation
+from ...utils.api import success_operation, error_operation, valid_scope
 from ...decorators.common import log_record
 
 bp = Blueprint('currency', __name__, url_prefix='/api/')
@@ -29,6 +29,8 @@ def delete(id):
 @log_record
 def __update(id, method):
     try:
+        valid_scope(__name__, method)
+
         schema = SaveCurrencyInput()
         document = schema.load(request.json)
 
@@ -44,5 +46,7 @@ def __update(id, method):
         return error_operation(__name__, method, 400, ve)
     except NotUniqueError as nue:
         return error_operation(__name__, method, 422, nue)
+    except ReferenceError as re:
+        return error_operation(__name__, method, 401, re)
     except Exception as ex:
         return error_operation(__name__, method, 500, ex)

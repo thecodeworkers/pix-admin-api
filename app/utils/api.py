@@ -1,4 +1,5 @@
 from flask import abort
+from flask.globals import session
 
 response = lambda result='': {'result': result}
 
@@ -22,6 +23,17 @@ def error_operation(service, method, code, error):
             'error': error
         }
     }
+
+def valid_scope(service, method):
+    scopes = session['user']['role']['scopes']
+    service_name = service.split('.')
+
+    scope_name = f'{service_name[-1]}_{method}'
+
+    if scope_name not in scopes:
+        raise ReferenceError('Unauthorized')
+
+    pass
 
 def __default_log_entry(*args):
     return {

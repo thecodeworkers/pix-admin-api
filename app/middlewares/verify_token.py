@@ -20,12 +20,12 @@ def verify_app_token():
         pass
 
     except Exception as e:
-        api_abort(403, e)
+        api_abort(401, e)
 
 def verify_user_token():
     try:
         headers = request.headers
-        common_message = 'Please provide the app token'
+        common_message = 'Please provide the user token'
 
         if 'Authorization' not in headers:
             raise ReferenceError(common_message)
@@ -47,10 +47,10 @@ def verify_user_token():
         pass
 
     except jwt.ExpiredSignatureError:
-        api_abort(403, 'Token expired')
+        api_abort(401, 'Token expired')
     except Users.DoesNotExist:
-        api_abort(403, 'Unauthorized')
+        api_abort(401, 'Unauthorized')
     except ReferenceError as re:
-        api_abort(403, re)
+        api_abort(401, re)
     except Exception as ex:
         api_abort(500, ex)
