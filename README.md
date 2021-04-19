@@ -58,7 +58,7 @@ Note:
    $ docker compose up
    ```
 
-## Use Applicaction 🚀
+## Use Application 🚀
 
 For use application, follow the steps below:
 
