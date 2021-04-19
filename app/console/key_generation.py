@@ -25,5 +25,5 @@ def __generate_keys():
     print(f' APP_SECRET: {OKGREEN}{secret_key}{ENDC}')
     print(f' APP_TOKEN: {OKGREEN}{app_token}{ENDC}')
     print('\n\033[94m APP_KEY and APP_SECRET must go in the .env')
-    print(f' APP_TOKEN must be in request header as X-API-Key{ENDC}')
+    print(f' APP_TOKEN must be in request header as x-api-key{ENDC}')
     print('')
