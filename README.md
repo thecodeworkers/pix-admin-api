@@ -28,7 +28,7 @@ Note:
     ```
 4. Install all dependencies.
    ```sh
-   $ pip install requirements.txt
+   $ pip install -r requirements.txt
    ```
 5. Copy the contents of the .env.example to .env
    ```sh
